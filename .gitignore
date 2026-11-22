@@ -1,0 +1,25 @@
+# .gitignore - tells Git which files and folders to NEVER track
+
+# Python virtual environment (huge, and everyone can recreate it)
+venv/
+.venv/
+
+# Python cache files created automatically
+__pycache__/
+*.pyc
+
+# Our SQLite database (it is generated automatically and may hold sensitive log data)
+backend/incidents.db
+
+# Uploaded log files (may contain sensitive information)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Large generated sample file (anyone can regenerate it with generate_logs.py)
+sample_logs/large_enterprise_logs.csv
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

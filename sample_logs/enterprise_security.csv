@@ -1,0 +1,32 @@
+timestamp,source_ip,destination_ip,attack_type,severity,status,description
+2026-11-14 01:12:45,185.220.101.4,10.0.2.15,Brute Force,High,Blocked,Multiple failed SSH logins for user root
+2026-11-14 03:47:10,45.155.205.233,10.0.1.10,Port Scan,Medium,Blocked,Sequential scan of ports 1-1024 detected by firewall
+2026-11-14 09:22:31,103.77.192.18,10.0.1.10,SQL Injection,Critical,Open,Payload UNION SELECT detected in /products.php parameter id
+2026-11-14 11:05:02,91.240.118.172,10.0.3.5,Phishing,High,Resolved,Employee reported credential-harvesting email with fake login link
+2026-11-14 16:40:18,194.26.29.102,10.0.2.15,Brute Force,High,Blocked,RDP login attempts exceeded threshold of 20 per minute
+2026-11-14 22:18:55,218.92.0.56,10.0.2.15,Brute Force,High,Blocked,Repeated failed SSH logins for user admin
+2026-11-15 00:31:09,61.177.172.14,10.0.2.15,Brute Force,Medium,Blocked,Dictionary attack on VPN gateway stopped by account lockout
+2026-11-15 04:02:44,5.188.62.76,10.0.1.20,SQL Injection,Critical,Investigating,Blind SQL injection pattern against customer database API
+2026-11-15 08:15:27,193.32.162.157,10.0.1.10,Cross-Site Scripting,High,Blocked,Script tag injected into feedback form input
+2026-11-15 10:50:03,141.98.10.60,10.0.1.10,Port Scan,Low,Resolved,Low-rate scan of web server ports from known research scanner
+2026-11-15 13:29:36,10.0.4.77,10.0.1.20,Malware,Critical,Open,Trojan beacon detected from finance workstation to database server
+2026-11-15 19:44:12,185.220.101.4,10.0.2.15,Brute Force,High,Blocked,Credential stuffing using leaked password list
+2026-11-16 02:09:58,45.155.205.233,10.0.1.10,DDoS,Critical,Mitigated,SYN flood of 45000 packets per second against web server
+2026-11-16 02:21:14,103.77.192.18,10.0.1.10,DDoS,Critical,Mitigated,Distributed HTTP flood from multiple botnet nodes
+2026-11-16 07:33:41,91.240.118.172,10.0.3.5,Phishing,Medium,Resolved,Suspicious email attachment quarantined by mail gateway
+2026-11-16 12:08:20,10.0.4.31,10.0.1.20,Privilege Escalation,High,Investigating,Standard user ran sudo to open a root shell on the database host
+2026-11-16 15:55:07,194.26.29.102,10.0.1.10,Port Scan,Medium,Blocked,Nmap fingerprint detected targeting web server
+2026-11-16 21:17:39,218.92.0.56,10.0.2.15,Brute Force,High,Blocked,Failed SSH logins from foreign IP repeated 60 times
+2026-11-17 01:44:50,61.177.172.14,10.0.2.15,Brute Force,Medium,Blocked,Failed logins against VPN gateway
+2026-11-17 05:26:15,5.188.62.76,10.0.1.10,SQL Injection,Critical,Blocked,WAF rule triggered by OR 1=1 payload in login form
+2026-11-17 09:03:28,193.32.162.157,10.0.1.10,Cross-Site Scripting,Medium,Blocked,Reflected XSS attempt in search parameter
+2026-11-17 11:41:52,141.98.10.60,10.0.3.5,Port Scan,Low,Resolved,Mail server ports probed once and then stopped
+2026-11-17 14:19:06,10.0.4.77,10.0.1.20,Malware,Critical,Investigating,Ransomware behavior: mass file renaming on shared drive
+2026-11-17 18:57:33,185.220.101.4,10.0.1.10,Brute Force,High,Blocked,Admin panel password guessing from Tor exit node
+2026-11-18 02:14:33,185.220.101.4,10.0.2.15,Brute Force,Critical,Open,Successful login after 400 failed attempts on root account
+2026-11-18 06:48:21,45.155.205.233,10.0.3.5,Phishing,High,Resolved,Spoofed CEO email requesting urgent payment
+2026-11-18 10:12:47,103.77.192.18,10.0.1.20,SQL Injection,Critical,Blocked,Stacked query attempt against reporting API
+2026-11-18 13:35:09,10.0.4.31,10.0.1.20,Privilege Escalation,High,Resolved,Unauthorized root access attempt blocked by policy
+2026-11-19 03:22:16,91.240.118.172,10.0.1.10,DDoS,Critical,Mitigated,UDP flood saturating the external firewall link
+2026-11-19 08:09:44,194.26.29.102,10.0.2.15,Brute Force,Medium,Blocked,Slow brute force across many usernames
+2026-11-19 12:51:30,218.92.0.56,10.0.1.10,Cross-Site Scripting,High,Open,Stored XSS payload found in comments table

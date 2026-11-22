@@ -1,0 +1,2 @@
+2026-11-20 10:00:00 webapp: ERROR XSS attempt <script>alert('hacked')</script> src=9.9.9.9 dst=10.0.1.10
+2026-11-20 10:05:00 webapp: WARNING Port scan <img src=x onerror=alert(1)> src=8.8.4.4 dst=10.0.1.10

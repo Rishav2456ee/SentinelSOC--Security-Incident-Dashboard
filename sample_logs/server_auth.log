@@ -1,0 +1,30 @@
+2026-11-14 01:12:45 sshd[2211]: WARNING Failed password for invalid user admin src=185.220.101.4 dst=10.0.2.15 port=52144
+2026-11-14 03:47:10 firewall: WARNING Port scan detected src=45.155.205.233 dst=10.0.1.10 ports=1-1024
+2026-11-14 09:22:31 webapp: CRITICAL SQL injection UNION SELECT in request src=103.77.192.18 dst=10.0.1.10
+2026-11-14 11:05:02 mailgw: ERROR Phishing email blocked src=91.240.118.172 dst=10.0.3.5
+2026-11-14 16:40:18 rdp: ERROR Authentication failure repeated src=194.26.29.102 dst=10.0.2.15
+2026-11-14 22:18:55 sshd[2390]: ERROR Failed password for root src=218.92.0.56 dst=10.0.2.15 port=40022
+2026-11-15 00:31:09 vpn: WARNING Authentication failure brute force suspected src=61.177.172.14 dst=10.0.2.15
+2026-11-15 04:02:44 webapp: CRITICAL Blind SQL injection pattern src=5.188.62.76 dst=10.0.1.20
+2026-11-15 08:15:27 webapp: ERROR XSS script tag in form field src=193.32.162.157 dst=10.0.1.10
+2026-11-15 10:50:03 firewall: INFO Port scan from research scanner src=141.98.10.60 dst=10.0.1.10
+2026-11-15 13:29:36 edr: CRITICAL Trojan malware beacon src=10.0.4.77 dst=10.0.1.20
+2026-11-15 19:44:12 sshd[2455]: ERROR Failed password credential stuffing src=185.220.101.4 dst=10.0.2.15 port=33901
+2026-11-16 02:09:58 firewall: CRITICAL DDoS SYN flood detected src=45.155.205.233 dst=10.0.1.10
+2026-11-16 02:21:14 firewall: CRITICAL DDoS HTTP flood from botnet src=103.77.192.18 dst=10.0.1.10
+2026-11-16 07:33:41 mailgw: WARNING Phishing attachment quarantined src=91.240.118.172 dst=10.0.3.5
+2026-11-16 12:08:20 sudo: ERROR Privilege escalation sudo root shell src=10.0.4.31 dst=10.0.1.20
+2026-11-16 15:55:07 firewall: WARNING Nmap scanning detected src=194.26.29.102 dst=10.0.1.10
+2026-11-16 21:17:39 sshd[2587]: ERROR Failed password invalid user src=218.92.0.56 dst=10.0.2.15 port=51310
+2026-11-17 01:44:50 vpn: WARNING Authentication failure src=61.177.172.14 dst=10.0.2.15
+2026-11-17 05:26:15 webapp: CRITICAL SQL injection OR 1=1 login form src=5.188.62.76 dst=10.0.1.10
+2026-11-17 09:03:28 webapp: WARNING Cross-site scripting reflected src=193.32.162.157 dst=10.0.1.10
+2026-11-17 11:41:52 firewall: INFO Port scan single probe src=141.98.10.60 dst=10.0.3.5
+2026-11-17 14:19:06 edr: CRITICAL Ransomware file encryption src=10.0.4.77 dst=10.0.1.20
+2026-11-17 18:57:33 webapp: ERROR Brute force admin login src=185.220.101.4 dst=10.0.1.10
+2026-11-18 02:14:33 sshd[2711]: CRITICAL Failed password then success after 400 tries src=185.220.101.4 dst=10.0.2.15 port=52144
+2026-11-18 06:48:21 mailgw: ERROR Phishing spoofed CEO email src=45.155.205.233 dst=10.0.3.5
+2026-11-18 10:12:47 webapp: CRITICAL SQL injection stacked query src=103.77.192.18 dst=10.0.1.20
+2026-11-18 13:35:09 sudo: ERROR Unauthorized root attempt privilege escalation src=10.0.4.31 dst=10.0.1.20
+2026-11-19 03:22:16 firewall: CRITICAL DDoS UDP flood src=91.240.118.172 dst=10.0.1.10
+2026-11-19 08:09:44 sshd[2802]: WARNING Failed password slow brute force src=194.26.29.102 dst=10.0.2.15 port=47012

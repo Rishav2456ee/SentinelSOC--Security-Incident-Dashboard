@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-theme-pref="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0a1122" />
+  <title>SentinelSOC | Security Incident Analytics</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%A1%3C/text%3E%3C/svg%3E" />
+  <script>
+    /* Runs BEFORE the page paints, so the saved theme is applied with no white/dark flash */
+    (function () {
+      try {
+        var pref = localStorage.getItem("theme") || "system"; // 'system' | 'light' | 'dark'
+        var dark = pref === "dark" || (pref === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        document.documentElement.dataset.themePref = pref;
+      } catch (e) { document.documentElement.dataset.theme = "dark"; }
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============ SVG ICON SPRITE: every icon is defined ONCE here, with a correct viewBox ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="brand">
+      <div class="brand-logo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></div>
+      <div class="brand-text">
+        <div class="brand-title">Sentinel<b>SOC</b></div>
+        <div class="brand-sub">Security Incident Analytics</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-item" href="#overview" data-view="overview" title="Overview">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"/></svg>
+        <span class="nav-label">Overview</span>
+      </a>
+      <a class="nav-item" href="#alerts" data-view="alerts" title="Alerts">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"/></svg>
+        <span class="nav-label">Alerts</span>
+        <span class="nav-badge hidden" id="alerts-badge">0</span>
+      </a>
+      <a class="nav-item" href="#incidents" data-view="incidents" title="Incident Log">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-list"/></svg>
+        <span class="nav-label">Incident Log</span>
+      </a>
+      <a class="nav-item" href="#risk" data-view="risk" title="Risk Analysis">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg>
+        <span class="nav-label">Risk Analysis</span>
+      </a>
+      <a class="nav-item" href="#data" data-view="data" title="Upload &amp; Data">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-upload"/></svg>
+        <span class="nav-label">Upload &amp; Data</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- ===================== MAIN COLUMN ===================== -->
+  <div class="content">
+
+    <header class="topbar">
+      <button id="menu-btn" class="icon-btn" type="button" aria-label="Toggle sidebar" title="Toggle sidebar">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-menu"/></svg>
+      </button>
+
+      <div class="page-title">
+        <h1 id="page-title">Security Overview</h1>
+        <p><span id="page-subtitle">Live incident intelligence &amp; attack trends</span><span class="updated" id="last-updated"></span></p>
+      </div>
+
+      <form id="global-search-form" class="search" role="search" autocomplete="off">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="global-search" type="search" placeholder="Search logs, IP, or attack..." aria-label="Global search" />
+        <kbd id="kbd-hint">Ctrl K</kbd>
+      </form>
+
+      <!-- Theme switcher: System / Light / Dark (saved in localStorage) -->
+      <div class="theme-switch" id="theme-switch" data-active="system" role="group" aria-label="Theme">
+        <button type="button" data-theme="system" title="Follow system theme" aria-label="System theme" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-monitor"/></svg></button>
+        <button type="button" data-theme="light" title="Light theme" aria-label="Light theme" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button type="button" data-theme="dark" title="Dark theme" aria-label="Dark theme" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      </div>
+
+      <div class="status-pill" id="status-pill">
+        <span class="dot"></span><span class="status-text" id="status-text">Connecting...</span>
+      </div>
+
+      <label for="file-input" id="quick-upload" class="btn btn-primary" title="Upload a log file">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-upload"/></svg>
+        <span class="btn-text">Upload</span>
+      </label>
+      <input id="file-input" type="file" accept=".csv,.json,.log,.txt" hidden />
+    </header>
+
+    <main class="views">
+
+      <!-- ============ VIEW 1: OVERVIEW ============ -->
+      <section class="view" id="view-overview" data-view="overview">
+        <div id="empty-banner" class="banner hidden">
+          <strong>No data yet.</strong> Open <a href="#data">Upload &amp; Data</a> and add a <code>.csv</code>, <code>.json</code> or <code>.log</code> file (try the files in <code>sample_logs/</code>).
+        </div>
+
+        <!-- KPI cards are clickable: data-goto tells main.js where to go -->
+        <div class="grid grid-kpi stagger">
+          <article class="kpi kpi-blue" data-goto="total" role="link" tabindex="0" title="Open the full Incident Log">
+            <div class="kpi-top"><p class="kpi-label">Total Incidents</p><span class="kpi-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-activity"/></svg></span></div>
+            <p id="kpi-total" class="kpi-value">0</p>
+            <p class="kpi-sub">All events in database</p>
+            <div class="spark" id="spark-total"></div>
+          </article>
+          <article class="kpi kpi-red" data-goto="critical" role="link" tabindex="0" title="Show Critical alerts">
+            <div class="kpi-top"><p class="kpi-label">Critical Alerts</p><span class="kpi-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg></span></div>
+            <p id="kpi-critical" class="kpi-value">0</p>
+            <p class="kpi-sub">Incidents rated Critical</p>
+            <div class="spark" id="spark-critical"></div>
+          </article>
+          <article class="kpi kpi-amber" data-goto="ips" role="link" tabindex="0" title="Open the unique attacking IPs breakdown">
+            <div class="kpi-top"><p class="kpi-label">Unique Attacking IPs</p><span class="kpi-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-globe"/></svg></span></div>
+            <p id="kpi-ips" class="kpi-value">0</p>
+            <p class="kpi-sub">Distinct source addresses</p>
+            <div class="spark" id="spark-ips"></div>
+          </article>
+          <article class="kpi kpi-violet" data-goto="top" role="link" tabindex="0" title="Show incidents of the top attack type">
+            <div class="kpi-top"><p class="kpi-label">Top Attack Type</p><span class="kpi-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zap"/></svg></span></div>
+            <p id="kpi-top" class="kpi-value kpi-text">N/A</p>
+            <p id="kpi-top-count" class="kpi-sub">0 occurrences</p>
+            <div class="spark" id="spark-top"></div>
+          </article>
+        </div>
+
+        <div class="grid grid-3 stagger">
+          <div class="panel span-2">
+            <div class="panel-head"><h2 class="panel-title">Attack Trends Over Time</h2><span id="trend-subtitle" class="panel-sub">Incidents per day by attack type</span></div>
+            <div class="legend" id="trend-legend" aria-label="Attack types"></div>
+            <div class="chart-box chart-tall">
+              <canvas id="trendChart"></canvas>
+              <div class="trend-tip" id="trend-tip" aria-hidden="true"></div>
+            </div>
+            <div class="hint-row">
+              <p class="hint">Hover a line to focus it &middot; click a line or a name above to isolate it &middot; click again to restore.</p>
+              <button id="trend-reset" type="button" class="btn btn-ghost btn-xs hidden"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-x"/></svg>Show all lines</button>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2 class="panel-title">Severity Distribution</h2><span class="panel-sub">Click a slice or label to filter</span></div>
+            <div class="chart-box chart-donut"><canvas id="severityDonut"></canvas></div>
+            <div class="legend legend-pills" id="severity-legend"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-3 stagger">
+          <div class="panel">
+            <div class="panel-head"><h2 class="panel-title">Top Attacking IPs</h2><span class="panel-sub">Click a bar to see its incidents</span></div>
+            <div class="chart-box"><canvas id="ipChart"></canvas></div>
+          </div>
+          <div class="panel span-2">
+            <div class="panel-head"><h2 class="panel-title">Recent Security Incidents</h2><a class="link" href="#incidents">View all &rarr;</a></div>
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead><tr><th>Time</th><th>Incident</th><th>Source IP</th><th class="hide-sm">Target</th><th>Severity</th><th class="hide-md">Status</th></tr></thead>
+                <tbody id="recent-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ VIEW 2: ALERTS ============ -->
+      <section class="view" id="view-alerts" data-view="alerts">
+        <div class="grid grid-stats stagger">
+          <div class="stat stat-red"><p class="stat-label">Critical alerts</p><p class="stat-value" id="alerts-critical">0</p></div>
+          <div class="stat stat-orange"><p class="stat-label">High alerts</p><p class="stat-value" id="alerts-high">0</p></div>
+          <div class="stat stat-blue"><p class="stat-label">Total needing attention</p><p class="stat-value" id="alerts-total">0</p></div>
+        </div>
+        <div class="panel stagger-one">
+          <div class="panel-head"><h2 class="panel-title">Critical &amp; High Alerts</h2><span id="alerts-count" class="panel-sub">0 incidents</span></div>
+          <div class="toolbar">
+            <div class="seg" id="alerts-seg" role="group" aria-label="Severity filter">
+              <button type="button" class="active" data-sev="">All</button>
+              <button type="button" data-sev="Critical">Critical</button>
+              <button type="button" data-sev="High">High</button>
+            </div>
+            <input id="alerts-search" type="search" class="field grow" placeholder="Search IP, attack, description..." />
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Time</th><th>Source IP</th><th class="hide-md">Destination</th><th>Attack Type</th><th>Severity</th><th class="hide-md">Status</th><th class="hide-lg">Description</th></tr></thead>
+              <tbody id="alerts-body"></tbody>
+            </table>
+          </div>
+          <div class="pager"><p id="alerts-page-info" class="hint">Page 1 of 1</p><div class="pager-btns"><button id="alerts-prev" type="button" class="btn btn-ghost">&larr; Prev</button><button id="alerts-next" type="button" class="btn btn-ghost">Next &rarr;</button></div></div>
+        </div>
+      </section>
+
+      <!-- ============ VIEW 3: INCIDENT LOG ============ -->
+      <section class="view" id="view-incidents" data-view="incidents">
+        <div class="panel">
+          <div class="panel-head"><h2 class="panel-title">Incident Log Explorer</h2><span id="explorer-count" class="panel-sub">0 incidents</span></div>
+          <div class="toolbar">
+            <input id="search-input" type="search" class="field grow" placeholder="Search IP, attack, status, description..." />
+            <select id="severity-filter" class="field"><option value="">All severities</option></select>
+            <select id="type-filter" class="field"><option value="">All attack types</option></select>
+            <select id="per-page" class="field" title="Rows per page">
+              <option value="10">10 / page</option>
+              <option value="25">25 / page</option>
+              <option value="50">50 / page</option>
+              <option value="100">100 / page</option>
+            </select>
+            <button id="reset-filters" type="button" class="btn btn-ghost">Reset</button>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Time</th><th>Source IP</th><th class="hide-md">Destination</th><th>Attack Type</th><th>Severity</th><th class="hide-md">Status</th><th class="hide-lg">Description</th></tr></thead>
+              <tbody id="explorer-body"></tbody>
+            </table>
+          </div>
+          <div class="pager"><p id="explorer-page-info" class="hint">Page 1 of 1</p><div class="pager-btns"><button id="explorer-prev" type="button" class="btn btn-ghost">&larr; Prev</button><button id="explorer-next" type="button" class="btn btn-ghost">Next &rarr;</button></div></div>
+        </div>
+      </section>
+
+      <!-- ============ VIEW 4: RISK ANALYSIS ============ -->
+      <section class="view" id="view-risk" data-view="risk">
+        <div class="grid grid-3 stagger">
+          <div class="panel span-2" id="risk-panel">
+            <div class="panel-head"><h2 class="panel-title">Unique Attacking IPs &middot; Risk Ranking</h2><span class="panel-sub" id="risk-sub">Risk score out of 100</span></div>
+            <div id="risk-list" class="risk-list"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2 class="panel-title">Attack Type Breakdown</h2><span class="panel-sub">Click to filter</span></div>
+            <div class="chart-box chart-tall"><canvas id="typeChart"></canvas></div>
+          </div>
+        </div>
+        <div class="grid grid-3 stagger">
+          <div class="panel">
+            <div class="panel-head"><h2 class="panel-title">Severity Distribution</h2><span class="panel-sub">Click a bar to filter</span></div>
+            <div class="chart-box"><canvas id="severityBar"></canvas></div>
+          </div>
+          <div class="panel span-2">
+            <div class="panel-head"><h2 class="panel-title">How the risk score works</h2></div>
+            <p class="prose">Every incident earns <strong>points</strong> by severity: <span class="txt-critical">Critical = 10</span>, <span class="txt-high">High = 6</span>, <span class="txt-medium">Medium = 3</span>, <span class="txt-low">Low = 1</span>. All points from one source IP are added up. The IP with the most points gets <strong>100</strong>, and every other IP is scaled against it:</p>
+            <p class="formula mono">risk score = (IP points &divide; highest IP points) &times; 100</p>
+            <p class="prose">Tiers: <span class="txt-critical">80+ Critical</span>, <span class="txt-high">60+ High</span>, <span class="txt-medium">40+ Medium</span>, <span class="txt-low">below 40 Low</span>. The score is <em>relative</em> to the loaded data. Click any IP to open its incidents.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ VIEW 5: UPLOAD & DATA ============ -->
+      <section class="view" id="view-data" data-view="data">
+        <div class="grid grid-3 stagger">
+          <div class="panel span-2">
+            <div class="panel-head"><h2 class="panel-title">Upload Log File</h2><span class="panel-sub">.csv .json .log .txt &middot; max 20 MB</span></div>
+            <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Drop a log file here or press Enter to browse">
+              <svg class="ico ico-xl" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-upload"/></svg>
+              <h3>Drag &amp; drop a log file here</h3>
+              <p>or click to browse your computer</p>
+              <span class="btn btn-primary">Browse files</span>
+              <div class="progress"><span></span></div>
+            </div>
+            <div class="mode-row">
+              <span class="hint">When uploading:</span>
+              <div class="seg" id="mode-seg" role="group" aria-label="Upload mode">
+                <button type="button" class="active" data-mode="replace">Replace existing data</button>
+                <button type="button" data-mode="append">Add to existing data</button>
+              </div>
+            </div>
+            <p id="mode-hint" class="hint">Replace: the old incidents are deleted and only the new file is analysed.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2 class="panel-title">Database Stats</h2></div>
+            <div class="stat-list">
+              <div><span>Incidents stored</span><b id="stat-rows">0</b></div>
+              <div><span>Unique attacking IPs</span><b id="stat-ips">0</b></div>
+              <div><span>Attack types</span><b id="stat-types">0</b></div>
+              <div><span>Date range</span><b id="stat-range">&mdash;</b></div>
+              <div><span>Database file size</span><b id="stat-size">0 KB</b></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-3 stagger">
+          <div class="panel span-2">
+            <div class="panel-head"><h2 class="panel-title">Files in Database</h2><span class="panel-sub">Rows loaded per file</span></div>
+            <div class="table-wrap">
+              <table class="tbl"><thead><tr><th>File name</th><th>Incidents</th></tr></thead><tbody id="files-body"></tbody></table>
+            </div>
+          </div>
+          <div class="panel danger">
+            <div class="panel-head"><h2 class="panel-title">Danger Zone</h2></div>
+            <p class="prose">Permanently delete every stored incident. Uploaded raw files stay in <code>backend/uploads/</code>.</p>
+            <button id="clear-btn" type="button" class="btn btn-danger"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"/></svg>Clear Data</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="vendor/chart.umd.min.js"></script>
+<script>
+  // If the local file is missing, fall back to the CDN so the dashboard still works online
+  if (typeof Chart === "undefined") {
+    document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"><\/script>');
+  }
+</script>
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/table.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
