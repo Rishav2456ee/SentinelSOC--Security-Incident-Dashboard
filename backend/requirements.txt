@@ -1,3 +1,4 @@
 # requirements.txt - the list of external Python libraries this project needs
 Flask>=3.0        # Flask: the lightweight web framework that runs our server and API
 pandas>=2.0       # pandas: reads CSV/JSON and does fast grouping and counting for analytics
+gunicorn
